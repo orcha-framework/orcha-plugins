@@ -1,0 +1,7 @@
+docutils==0.19; python_full_version >= "3.7.2" and python_full_version < "4.0.0" and python_version >= "3.7"
+lockfile==0.12.2; python_full_version >= "3.7.2" and python_full_version < "4.0.0" and python_version >= "3"
+orcha==0.3.0rc2; python_full_version >= "3.7.2" and python_full_version < "4.0.0"
+psutil==5.9.3; python_full_version >= "3.7.2" and python_full_version < "4.0.0"
+python-daemon==2.3.2; python_full_version >= "3.7.2" and python_full_version < "4.0.0" and python_version >= "3"
+systemd-python==234
+typing-extensions==4.4.0; python_full_version >= "3.7.2" and python_full_version < "4.0.0" and python_version >= "3.7"

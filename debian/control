@@ -1,0 +1,35 @@
+Source: python3-orcha-plugins
+Section: python
+Priority: extra
+Maintainer: Javier Alonso <jalonso@teldat.com>
+Build-Depends:
+  debhelper (>= 11~),
+  dh-python,
+  python3-all,
+  python3-setuptools,
+  python3-docutils,
+  python3-sphinx,
+  python3-psutil,
+  python3-daemon,
+  python3-systemd,
+  python3-typing-extensions,
+Standards-Version: 3.9.8
+X-Python3-Version: >= 3.7
+
+Package: python3-orcha-watchdog
+Architecture: all
+Depends:
+  ${python3:Depends},
+  ${misc:Depends},
+  python3-orcha (>= 0.3.0),
+  python3-systemd,
+Description: Python Orcha orchestrator - SystemD watchdog plugin
+
+Package: python3-orcha-watchdog2
+Architecture: all
+Depends:
+  ${python3:Depends},
+  ${misc:Depends},
+  python3-orcha (>= 0.3.0),
+  python3-systemd,
+Description: Python Orcha orchestrator - SystemD watchdog plugin

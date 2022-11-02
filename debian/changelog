@@ -1,0 +1,8 @@
+python3-orcha-plugins (0.3.0-rc2) UNRELEASED; urgency=high
+
+  * Fix a race condition when calling "condition" and then "on_start" that
+    could lead to potential issues as a condition may evaluate to true but
+    when reserving the resources another petition had already taken them,
+    leading to an invalid value (i.e.: negative resource amount).
+
+ -- Javier Alonso <jalonso@teldat.com>  Thu, 27 Oct 2022 16:26:00 +0200
