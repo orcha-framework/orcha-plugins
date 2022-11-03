@@ -40,8 +40,6 @@ from .constants import WATCHDOG_ID
 if typing.TYPE_CHECKING:
     import argparse
 
-__version__ = "0.0.1"
-
 
 class WatchdogClient(BasePlugin):
     """Plugin that sends a :obj:`WatchdogPetition` through the pluggable interface, by simply
@@ -82,6 +80,7 @@ class WatchdogClient(BasePlugin):
 
             return ret
         except Empty:
+            manager.finish(WATCHDOG_ID)
             error_msg = (
                 "Did not receive a response from server in time "
                 f"(more than {args.timeout} seconds have passed)"

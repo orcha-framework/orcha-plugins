@@ -132,7 +132,7 @@ flake8 = "*"
 pylint = "*"
 
 [package.extras]
-dev = ["pytest", "mypy", "isort"]
+dev = ["isort", "mypy", "pytest"]
 
 [[package]]
 name = "identify"
