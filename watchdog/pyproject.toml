@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "orcha-watchdog"
-version = "0.1.4"
+version = "0.1.5"
 description = "Orcha pluggable for SystemD Watchdog integration"
 authors = ["Javier Alonso <jalonso@teldat.com>"]
 license = "MIT"

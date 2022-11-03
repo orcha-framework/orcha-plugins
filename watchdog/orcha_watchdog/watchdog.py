@@ -50,7 +50,7 @@ class Watchdog(Pluggable):
             return WatchdogPetition(queue=m.extras.get("queue"))
 
     def on_petition_start(self, p: Petition):
-        if p.id == WATCHDOG_ID and isinstance(p, WatchdogPetition):
+        if p.id == WATCHDOG_ID and isinstance(p, WatchdogPetition) and p.state.is_enqueued:
             p.state = PetitionState.RUNNING
 
     def on_petition_finish(self, p: Petition):
