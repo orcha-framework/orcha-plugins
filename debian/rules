@@ -1,21 +1,30 @@
-#! /usr/bin/make -f
+#!/usr/bin/make -f
+
 include /usr/share/dpkg/pkg-info.mk
 
 export DH_VERBOSE=1
 
-PLUGINS=watchdog "watchdog2"
+PLUGINS=$(shell python3 scripts/list_plugins.py)
 
-%:
-	for plugin in $(PLUGINS); do \
-		PYBUILD_NAME="orcha-$$plugin" dh $@ --with python3 --with systemd --buildsystem=pybuild --sourcedirectory="$$plugin" ; \
-	done
+define DH
+	PYBUILD_NAME="orcha-$(1)" dh $(2) -D $(1) --with python3,systemd --buildsystem=pybuild
+endef
+
+clean/%:
+	$(call DH,$*,clean)
+
+build/%:
+	$(call DH,$*,build)
+
+binary/%:
+	$(call DH,$*,binary)
 
 override_dh_installinit:
-	dh_installinit --name=orcha-wd@
+	dh_installsystemd --name=orcha-wd@
 
-override_dh_systemd_start:
-	dh_systemd_start --no-start
+override_dh_auto_test:
+	python3 -m pylama --ignore E501,E203
 
-# export PYBUILD_NAME=orcha-plugins
+%: $(addprefix %/,$(PLUGINS)) ;
+
 export PYBUILD_DISABLE=test
-# export PYBUILD_INSTALL_ARGS=--install-lib=/usr/local/lib/ --install-scripts=/usr/local/bin/

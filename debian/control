@@ -1,7 +1,7 @@
 Source: python3-orcha-plugins
 Section: python
 Priority: extra
-Maintainer: Javier Alonso <jalonso@teldat.com>
+Maintainer: Javier Alonso <jalonso@teldat.com>, Miguel Robledo <mrobledo@teldat.com>
 Build-Depends:
   debhelper (>= 11~),
   dh-python,
@@ -13,6 +13,7 @@ Build-Depends:
   python3-daemon,
   python3-systemd,
   python3-typing-extensions,
+  python3-pylama,
 Standards-Version: 3.9.8
 X-Python3-Version: >= 3.7
 
@@ -23,13 +24,13 @@ Depends:
   ${misc:Depends},
   python3-orcha (>= 0.3.0),
   python3-systemd,
-Description: Python Orcha orchestrator - SystemD watchdog plugin
+Description: Python Orcha orchestrator - systemd watchdog plugin
 
-Package: python3-orcha-watchdog2
+Package: python3-orcha-timeline
 Architecture: all
 Depends:
   ${python3:Depends},
   ${misc:Depends},
   python3-orcha (>= 0.3.0),
-  python3-systemd,
-Description: Python Orcha orchestrator - SystemD watchdog plugin
+  python3-matplotlib,
+Description: Python Orcha orchestrator - timeline plugin

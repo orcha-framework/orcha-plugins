@@ -43,7 +43,7 @@ if typing.TYPE_CHECKING:
 
 class WatchdogClient(BasePlugin):
     """Plugin that sends a :obj:`WatchdogPetition` through the pluggable interface, by simply
-    sending a message with the 
+    sending a message with the
     """
 
     name = "watchdog"
