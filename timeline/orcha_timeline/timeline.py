@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import typing
 
-from orcha.lib.pluggable import Pluggable
+from orcha import ConditionFailed
+from orcha.ext import Pluggable
 
 from .logging import Event, EventType, log
 
@@ -10,39 +11,6 @@ if typing.TYPE_CHECKING:
     from typing import Any, Optional
 
     from orcha.interfaces import Petition
-    from orcha.interfaces.types import Bool
-
-
-class ConditionError(Exception):
-    def __init__(self, missing: str):
-        super().__init__(f"Condition is missing {missing} to succeed")
-        self.missing = missing
-
-    @property
-    def reason(self):
-        return f"Waiting for {self.missing}"
-
-    @property
-    def ec(self):
-        return None
-
-    @property
-    def fc(self):
-        return None
-
-    @property
-    def hatch(self):
-        return None
-
-    def __bool__(self):
-        return False
-
-    def render_data(self):
-        return {
-            "ec": self.ec,
-            "fc": self.fc,
-            "hatch": self.hatch,
-        }
 
 
 def petition_track(p):
@@ -56,10 +24,13 @@ def petition_render_data(p):
 class Timeline(Pluggable):
     def __init__(
         self,
+        backend: str,
         priority: float = float("inf"),
         id_blacklist: list[str] = (),
     ):
         super().__init__(priority)
+
+        assert backend in ("matplotlib",)
 
         self.blacklist = id_blacklist
         self.reasons = {}
@@ -87,7 +58,26 @@ class Timeline(Pluggable):
             label="Orcha start",
         )
 
+    def on_condition_check(self, p: Petition):
+        self.p_id = p.id
+
+    def on_condition_fail(self, reason: ConditionFailed):
+        if self.p_id not in self.reasons or self.reasons[self.p_id] != reason.reason:
+            self.on_timeline_event(
+                EventType.Start, track=reason.reason, render_data=reason.environment
+            )
+            self.reasons[self.p_id] = reason.reasons
+
     def on_petition_start(self, p: Petition):
+        if p.id in self.reasons:
+            self.on_timeline_event(
+                EventType.End,
+                "wait",
+                id=p.id,
+                track=petition_track(p),
+            )
+            del self.reasons[p.id]
+
         self.on_timeline_event(
             EventType.Start,
             "petition",
@@ -104,37 +94,3 @@ class Timeline(Pluggable):
             track=petition_track(p),
             status=p.state,
         )
-
-    def on_petition_check(self, p: Petition, result: Bool):
-        if result:
-            reason = None
-        elif isinstance(result, ConditionError):
-            reason = result.reason
-            render_data = result.render_data()
-        else:
-            reason = "(unknown)"
-            render_data = {}
-        prev_reason = self.reasons.get(p.id, None)
-
-        if prev_reason != reason:
-            if prev_reason is not None:
-                del self.reasons[p.id]
-                self.on_timeline_event(
-                    EventType.End,
-                    "wait",
-                    id=p.id,
-                    track=petition_track(p),
-                )
-
-            if reason is not None:
-                self.reasons[p.id] = reason
-                self.on_timeline_event(
-                    EventType.Start,
-                    "wait",
-                    id=p.id,
-                    track=petition_track(p),
-                    reason=reason,
-                    render_data=render_data,
-                )
-
-        return result
